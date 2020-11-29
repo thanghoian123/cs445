@@ -1,0 +1,85 @@
+.thumbnail{
+    text-align: center;
+}
+
+.thumbnail .cont-item{
+    position: relative;
+}
+
+.thumbnail .cont-item a img.img-main{
+    position: absolute;
+    z-index: 3;
+    transition: all 0.6s ease;
+}
+
+.thumbnail .cont-item a img.img-main:hover{
+    opacity: 0;
+    visibility: hidden;
+    /* display: none; */
+}
+
+.thumbnail .cont-item a img.img-main:hover .thumbnail .cont-item .button a{
+    opacity: 1 !important;
+}
+
+.thumbnail .button{
+    max-width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    
+   transition: all 0.4s ease;
+   z-index: 3;
+}
+
+.thumbnail .button .btn-buy{
+    padding: 0.5rem 1rem;
+    border:1px solid #F15E2C;
+    color: black;
+    display: inline-block;
+
+}
+
+.thumbnail .button .btn-buy:hover{  
+    background-color: #F15E2C;
+    color: white;
+    text-decoration: none;
+}
+
+.thumbnail .caption{
+    /* background-color: aqua; */
+}
+
+.thumbnail .caption .status-item{
+    color: #F15E2C;
+    font-size: 16px;
+    border-bottom: 1px dotted black;
+    padding: 0.7rem 0;
+}
+
+.thumbnail .caption .item-name{
+    font-size: 16px;
+    margin-top: 0.7rem;
+    font-weight: 700;
+}
+
+.thumbnail .caption .type-color{
+    font-size: 16px;
+    margin-top: 0.7rem;
+}
+
+.thumbnail .caption .prices{
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+@media screen and (max-width:768px){
+    
+    .thumbnail .button .btn-buy{
+        padding: 0.5rem 0.4rem;
+        font-size: 14px;
+    }
+}
