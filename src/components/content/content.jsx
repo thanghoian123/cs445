@@ -1,9 +1,13 @@
 import React from 'react';
+import ProductFilter from './productFilter/ProductFilter';
 import ListProducts from './listproducts/listproducts';
 import SideBar from './sidebar/SideBar';
 
 function Content(props) {
-    const {leftTree,onToggleItem} = props;
+    const {leftTree,onToggleItem,UpdateCart,type} = props;
+    const onUpdateCart =(data)=>{
+        UpdateCart(data);
+    }
     return (
         <div>
 
@@ -17,7 +21,8 @@ function Content(props) {
                         />
                     </div>
                     <div className="col-md-9 ">
-                        <ListProducts/>
+                        {type==''?<ListProducts onUpdateCart={onUpdateCart}/>:<ProductFilter onUpdateCart={onUpdateCart} type={type}/>}
+                        
                     </div>
                 </div>
 

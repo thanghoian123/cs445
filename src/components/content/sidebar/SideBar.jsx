@@ -1,20 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import * as actions from '../../../redux/actions/actions';
 import './sidebar.css';
 
 function SideBar(props) {
-    const {leftTree,onToggleItem} = props;
-    
-    useEffect(() => {
-        console.log('rerender');
-    }, [leftTree]);
+    const { typeP, onToggleItem } = props;
+    const [leftTree, setLeftTree] = useState(typeP);
+    console.log(typeP);
 
-    const onToggle = (index) => {       
-        onToggleItem(index);
+    useEffect(() => {
+       axios.get("https://api-doan.herokuapp.com/api/v1/category/categories").
+            then(resp=> {
+
+            })
+            .catch(err=> console.error(err))
+
+    }, []);
+
+    const onToggle = (index) => {
+        const cloneTree = [...leftTree];
+        cloneTree[index].isToggle = !cloneTree[index].isToggle;
+        setLeftTree(cloneTree);
     }
     const styleLabel = {
         "color": "black"
     }
-    
+
     return (
         <div>
 
@@ -34,11 +47,11 @@ function SideBar(props) {
                             {leftTree.map((item, index) => {
                                 return (
                                     <li key={index}>
-                                        <label onClick={()=>onToggle(index)} className="label" style={item.isToggle ? styleLabel : {}}>{item.label} {item.isToggle ? <i className="fas fa-chevron-up"></i> : <i className="fas fa-chevron-down"></i>} </label>
+                                        <label onClick={() => onToggle(index)} className="label" style={item.isToggle ? styleLabel : {}}>{item.label} {item.isToggle ? <i className="fas fa-chevron-up"></i> : <i className="fas fa-chevron-down"></i>} </label>
                                         <ul className={item.isToggle ? 'active' : ''} id="leaf">
-                                            {item.leaf.map((l, index)=>{
-                                                return(
-                                                <li key={index}><a href="true">{l}</a></li>
+                                            {item.leaf.map((l, index) => {
+                                                return (
+                                                    <li key={index}><Link to={`/type/${l.code}`}>{l.name}</Link></li>
                                                 )
                                             })}
                                         </ul>
@@ -54,5 +67,15 @@ function SideBar(props) {
         </div>
     );
 }
+const mapStateToProps = state => {
+    return {
+        typeP: state.typeP
+    }
+}
 
-export default SideBar;
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);

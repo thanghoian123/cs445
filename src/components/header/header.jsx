@@ -1,33 +1,96 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './header.css';
 import logo from './logo.png';
+import * as actions from '../../redux/actions/actions';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function Header(props) {
+    const { carts, amount } = props;
+    const [user, setUser] = useState({});
+    const [role, setRole] = useState("ROLE_USER");
+
+    var amounts = 0;
+    carts.forEach(element => {
+        amounts = amounts + element.quantity;
+    });
+    useEffect(() => {
+        amounts = amount;
+    }, [amount]);
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = 'js/script.js';
         script.async = true;
-
         document.body.appendChild(script);
     }, []);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('token'));
+        setUser(user);
+        if (user) {
+            const role = user.roles[0];
+            setRole(role);
+        }
+
+    }, []);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('token'));
+        if (user) {
+            const role = user.roles[0];
+            setRole(role);
+        }
+    }, [user]);
+
+    const onLogout = () => {
+        localStorage.removeItem('token');
+        setUser({});
+        setRole("ROLE_USER");
+    }
+
+    const viewAdmin = () => {
+        return (
+
+            <ul>
+                <li><a href="true"><i className="fas fa-search-plus"></i><span>Tra cứu đơn hàng</span></a></li>
+                <li><a href="true"><i className="fas fa-map-marker-alt"></i><span>Tìm cửa hàng</span></a></li>
+                <li><a href="true"><i className="fas fa-heart"></i><span>Yêu thích</span></a></li>
+                <li><Link to="/" onClick={onLogout}><i className="fas fa-user"></i><span>Đăng Xuat</span></Link></li>
+                <li><Link to="/admin" ><i className="fas fa-user"></i><span>Adminpage</span></Link></li>
+                <li><Link to='/cart'><i className="fas fa-shopping-cart"></i><span>Giỏ hàng(<span>{amounts}</span>)</span></Link></li>
+            </ul>
+
+
+        )
+    }
+
+    const viewUser = () => {
+        return (
+            <ul>
+                <li><a href="true"><i className="fas fa-search-plus"></i><span>Tra cứu đơn hàng</span></a></li>
+                <li><a href="true"><i className="fas fa-map-marker-alt"></i><span>Tìm cửa hàng</span></a></li>
+                <li><a href="true"><i className="fas fa-heart"></i><span>Yêu thích</span></a></li>
+                {user && user.username ? <li><Link to="/" onClick={onLogout}><i className="fas fa-user"></i><span>Đăng Xuat</span></Link></li> :  <li><Link to="/signin"><i className="fas fa-user"></i><span>Đăng Nhập</span></Link></li>}
+                
+                <li><Link to='/cart'><i className="fas fa-shopping-cart"></i><span>Giỏ hàng(<span>{amounts}</span>)</span></Link></li>
+            </ul>
+        )
+    }
+
     return (
         <div className="container-fluid header">
             <div className="row header-option">
                 <div className="col-sm-4 col-md-4 col-xs-0">
                 </div>
                 <div className="col-sm-8 col-md-8 col-xs-12">
-                    <ul>
-                        <li><a href="true"><i className="fas fa-search-plus"></i><span>Tra cứu đơn hàng</span></a></li>
-                        <li><a href="true"><i className="fas fa-map-marker-alt"></i><span>Tìm cửa hàng</span></a></li>
-                        <li><a href="true"><i className="fas fa-heart"></i><span>Yêu thích</span></a></li>
-                        <li><a href="true"><i className="fas fa-user"></i><span>Đăng nhập</span></a></li>
-                        <li><a href="true"><i className="fas fa-shopping-cart"></i><span>Giỏ hàng(<span>0</span>)</span></a></li>
-                    </ul>
+                    {role== "ROLE_ADMIN" ? viewAdmin() : viewUser()}
                 </div>
             </div>
             <div className="row pt-3">
                 <div className="logo">
-                    <img src={logo} alt="logo" />
+                    <Link to="/"><img src={logo} alt="logo" /></Link>
+
                 </div>
                 <div className="nav-menu">
                     <ul>
@@ -81,4 +144,17 @@ function Header(props) {
     );
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return {
+        carts: state.carts
+    }
+}
+
+const mapDispatchToProps = (dispacth, props) => {
+    return {
+
+    }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

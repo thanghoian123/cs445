@@ -9,6 +9,9 @@
 .header .header-option{
     background-color: #303030;
 }
+.header .header-option i{
+    margin-right: 0.4rem;
+}
 
 .header .header-option ul{
     display: flex;

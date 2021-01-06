@@ -6,7 +6,6 @@ const bar = document.querySelector('.bar');
 const leftTree = document.querySelectorAll('.left-tree ul.nav > li label');
 const leaf = document.querySelectorAll('.left-tree ul.nav > li ul')
 
-console.log(leaf);
 
 closeMenu.addEventListener('click',()=>{
     navmenu.classList.remove('active-menu');
